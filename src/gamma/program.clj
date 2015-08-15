@@ -22,7 +22,7 @@
       ""
       (apply str x))))
 
-(defn unfipp [x & rst]
+(defn unfipp [x]
   (->> x
     flatten
     (remove keyword?)
@@ -32,10 +32,8 @@
   (let [p precision]
     (str
       (precision-defaults p)
-      (with-out-str
-       (unfipp
-         (emit/emit (:ir shader) shader)
-         {:width 80})))))
+      (unfipp
+        (emit/emit (:ir shader) shader)))))
 
 (defn shader [shader opts]
   (let [ast (ast shader)
