@@ -24,6 +24,11 @@
 
 (defn unfipp [x]
   (->> x
+    (clojure.walk/prewalk
+      (fn [x]
+        (if (and (vector? x) (= (first x) :nest))
+          (drop 2 x)
+          x)))
     flatten
     (remove keyword?)
     (apply str)))
