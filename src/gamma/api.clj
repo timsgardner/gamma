@@ -152,8 +152,11 @@
 (defn uniform [name type]
   {:tag :variable :name name :type type :storage :uniform})
 
-(defn varying [name type precision]
-  {:tag :variable :name name :type type :storage :varying :precision precision})
+(defn varying
+  ([name type]
+   {:tag :variable :name name :type type :storage :varying})
+  ([name type precision]
+   {:tag :variable :name name :type type :storage :varying :precision precision}))
 
 (defn variable
   ([x] (variable x nil))
