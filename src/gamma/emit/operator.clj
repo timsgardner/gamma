@@ -30,11 +30,17 @@
 
 (defmethod emit :conditional-choice [db x])
 
+(def emit-aget-log (atom []))
 
 (defmethod emit :aget [db x]
-  (str (emit (first (body x))) "[" (emit (second (body x))) "]"))
-
+  (swap! emit-aget-log conj
+    {:db db, :x x})
+  [:group
+   (emit db (db (first (body x)))) "["
+   (emit db (db (second (body x))))"]"])
 
 (defmethod emit :selector [db x]
-  (str (emit (first (body x))) "." (name (second (body x)))))
+  [:group
+   (emit db (first (body x))) "."
+   (name (second (body x)))])
 
