@@ -32,9 +32,8 @@
 
 
 (defmethod emit :aget [db x]
-  (str (emit (first (body x))) "[" (emit (second (body x))) "]"))
+  [:group (emit (db (first (body x)))) "[" (emit (db (second (body x)))) "]"])
 
 
 (defmethod emit :selector [db x]
-  (str (emit (first (body x))) "." (name (second (body x)))))
-
+  [:group (emit (db (first (body x)))) "." (name (second (body x)))])
