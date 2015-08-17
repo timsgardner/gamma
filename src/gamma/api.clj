@@ -195,8 +195,22 @@
 
 ;; operators
 
+(defn aget-return-type [a]
+  (assert (= :aget (:head a)))
+  (let [ar-term (first (:body a))]
+    (cond
+      (#{:vec2 :vec3 :vec4} (:type ar-term))
+      :float ;; right? no?
+
+      ;;... other cases go here :-/
+      :else (throw (Exception. "Can't analyze aget return type")))))
+
 (defn arithmetic-type [a b]
-  (let [t (into #{} (map :type [a b]))]
+  (let [tf (fn [x]
+             (if (= :aget (:head x))
+               (aget-return-type x)
+               (:type x)))
+        t (into #{} (map tf [a b]))]
     (if (= 1 (count t))
       (#{:float :int :vec2 :vec3 :vec4 :ivec2 :ivec3 :ivec4}
         (first t)))))
