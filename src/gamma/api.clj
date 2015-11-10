@@ -99,8 +99,6 @@
     (map
       #(vector (:operator %) %)
       [
-       {:operator :aget}
-       {:operator :selector}
        {:operator :increment :literal "++" :class :postfix}
        {:operator :decrement :literal "--" :class :postfix}
        {:operator :pre-increment :literal "++" :class :prefix}
@@ -352,6 +350,17 @@
     (if (get depth-range-swizzles c)
       :float
       (get {1 :float 2 :vec2 3 :vec3 4 :vec4} swizzle-length))))
+
+(defn collection-element-type [x]
+  ({:vec4 :float :vec3 :float :vec2 :float
+    :ivec4 :int :ivec3 :int :ivec2 :int
+    :bvec4 :bool :bvec3 :bool :bvec2 :bool} x))
+
+(defn aget [x i]
+  (let [t (ast/term :aget x i)]
+    (assoc
+     t
+     :type (collection-element-type (:type (first (:body t)))))))
 
 (defn swizzle [x c]
   (assoc
